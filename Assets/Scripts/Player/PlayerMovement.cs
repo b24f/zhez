@@ -1,10 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
+    public Transform playerCamera;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -13,11 +14,31 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5f;
     public float gravity = -9.81f;
 
+    float xRotation = 0f;
+    public float sensitivity = 400f;
+
     Vector3 velocity;
     bool isGrounded;
 
+    [HideInInspector]
+    public bool verticalMovement = false;
+
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     void Update()
     {
+        Vector3 move = Vector3.zero;
+
+        // Player Movement
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+        // Camera Movement
+        float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
@@ -25,10 +46,21 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        if (verticalMovement)
+        {
+            move = transform.forward * z;
+        }
+        else
+        {
+            move = transform.right * x + transform.forward * z;
 
-        Vector3 move = transform.right * x + transform.forward * z;
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            
+            playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+            transform.Rotate(Vector3.up * mouseX);
+        }
 
         controller.Move(move * speed * Time.deltaTime);
 
