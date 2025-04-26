@@ -1,9 +1,13 @@
 using UnityEngine;
 
-public class BalanceTrigger : MonoBehaviour
+public class BalanceZone : MonoBehaviour
 {
     public Transform playerCamera;
     private PlayerMovement playerMovement;
+
+    public MeshCollider treeCollider;
+    
+    private ScreenFader fader;
 
     public float tiltSpeed = 30f;
     public float playerTiltSpeed = 50f;
@@ -17,6 +21,7 @@ public class BalanceTrigger : MonoBehaviour
     private void Start()
     {
         playerMovement = FindObjectOfType<PlayerMovement>(); // Cache the reference at start
+        fader = FindObjectOfType<ScreenFader>();
     }
 
     private void Update()
@@ -56,7 +61,15 @@ public class BalanceTrigger : MonoBehaviour
         }
 
         // Clamp
-        currentTilt = Mathf.Clamp(currentTilt, -maxTilt, maxTilt);
+        currentTilt = Mathf.Clamp(currentTilt, -60f, 60f);
+        
+        // Fall
+        if (Mathf.Abs(currentTilt) > maxTilt)
+        {
+            playerMovement.gravity = -9.81f * 3f;
+            Destroy(treeCollider);
+            fader.FadeOut();
+        }
 
         // Apply to camera
         playerCamera.localRotation = Quaternion.Euler(
@@ -74,31 +87,30 @@ public class BalanceTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            SetVerticalMovement(false);
-            ResetTilt();
-        }
-    }
+    // private void OnTriggerExit(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         SetVerticalMovement(false);
+    //     }
+    // }
 
-    private void ResetTilt()
-    {
-        currentTilt = 0f;
-        playerCamera.localRotation = Quaternion.Euler(
-            playerCamera.localRotation.eulerAngles.x,
-            playerCamera.localRotation.eulerAngles.y,
-            0f
-        );
-    }
+    // private void ResetTilt()
+    // {
+    //     currentTilt = 0f;
+    //     playerCamera.localRotation = Quaternion.Euler(
+    //         playerCamera.localRotation.eulerAngles.x,
+    //         playerCamera.localRotation.eulerAngles.y,
+    //         0f
+    //     );
+    // }
 
-    private void SetVerticalMovement(bool value)
+    private void SetVerticalMovement(bool inZone)
     {
         if (playerMovement != null)
         {
-            playerMovement.verticalMovement = value;
-            playerInZone = value;
+            playerMovement.verticalMovement = inZone;
+            playerInZone = inZone;
         }
     }
 }

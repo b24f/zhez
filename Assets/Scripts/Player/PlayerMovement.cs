@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,8 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
-    public float speed = 5f;
-    public float gravity = -9.81f;
+    public float speed = 3f;
 
     float xRotation = 0f;
     public float sensitivity = 400f;
@@ -22,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     [HideInInspector]
     public bool verticalMovement = false;
+    public float gravity = -9.81f;
 
     void Start()
     {
@@ -53,17 +51,16 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             move = transform.right * x + transform.forward * z;
-
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-            
+
             playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
             transform.Rotate(Vector3.up * mouseX);
         }
 
-        controller.Move(move * speed * Time.deltaTime);
-
+        controller.Move(Time.deltaTime * speed * move);
+        
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
