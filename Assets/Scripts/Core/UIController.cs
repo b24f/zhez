@@ -8,6 +8,7 @@ public class UIController : MonoBehaviour
 
     [SerializeField] private GameObject HUDComponent;
     [SerializeField] private GameObject MenuComponent;
+    [SerializeField] private GameObject DialoguePanelComponent;
    
     private void Awake()
     {
@@ -17,12 +18,18 @@ public class UIController : MonoBehaviour
     public void Reset()
     {
         MenuComponent.SetActive(false);
-        //HUDComponent.SetActive(false);
+        DialoguePanelComponent.SetActive(false);
     }
 
     public void RenderMenu()
     {
         Reset();
         MenuComponent.SetActive(true);
+    }
+
+    public void RenderDialogue()
+    {
+        Reset();
+        DialoguePanelComponent.SetActive(true);
     }
 }

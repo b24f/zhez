@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - FallenTreeBalance
+  - DialoguePanel
   layers:
   - Default
   - TransparentFX

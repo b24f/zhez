@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
 
     public float speed = 3f;
+    public float gravity = -9.81f;
 
     float xRotation = 0f;
     public float sensitivity = 400f;
@@ -19,8 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     [HideInInspector]
     public bool verticalMovement = false;
-    public float gravity = -9.81f;
-
+    
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;

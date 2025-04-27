@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement style="flex-grow: 1;">
-        <ui:Label tabindex="-1" text="Complete Current Quest" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="font-size: 28px;" />
+        <ui:Label tabindex="-1" text="Complete Current Quest" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="font-size: 28px; -unity-font: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=b4052731784e9ca43a421c72ebc7ee4b&amp;type=3#NotInter-Regular&quot;); color: rgb(27, 27, 27); -unity-font-style: normal;" />
     </ui:VisualElement>
 </ui:UXML>

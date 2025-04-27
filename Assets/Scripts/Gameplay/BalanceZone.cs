@@ -2,29 +2,35 @@ using UnityEngine;
 
 public class BalanceZone : MonoBehaviour
 {
-    public Transform playerCamera;
-    private PlayerMovement playerMovement;
-
-    public MeshCollider treeCollider;
+    [SerializeField] private Transform PlayerCamera;
+    [SerializeField] private GameObject FallenTree;
+    [SerializeField] private Rigidbody PlayerRB;
     
+    private PlayerMovement playerMovement;
     private ScreenFader fader;
 
-    public float tiltSpeed = 30f;
-    public float playerTiltSpeed = 50f;
-    public float maxTilt = 30f;
-
+    // Player tilt
+    [SerializeField] private float tiltSpeed = 30f;
+    [SerializeField] private float playerTiltSpeed = 50f;
+    private const float MaxTilt = 30f;
     private float currentTilt = 0f;
     private int autoTiltDirection = -1;
     private float playerInput = 0f;
     private bool playerInZone = false;
 
+    // Tree fall
+    [SerializeField] private float treeRotationDuration = 2f;
+    private const float MaxAngle = -30f;
+    private float elapsed = 0f;
+    private bool finished = false;
+
     private void Start()
     {
-        playerMovement = FindObjectOfType<PlayerMovement>(); // Cache the reference at start
+        playerMovement = FindObjectOfType<PlayerMovement>();
         fader = FindObjectOfType<ScreenFader>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!playerInZone) return;
 
@@ -64,17 +70,15 @@ public class BalanceZone : MonoBehaviour
         currentTilt = Mathf.Clamp(currentTilt, -60f, 60f);
         
         // Fall
-        if (Mathf.Abs(currentTilt) > maxTilt)
+        if (Mathf.Abs(currentTilt) > MaxTilt)
         {
-            playerMovement.gravity = -9.81f * 3f;
-            Destroy(treeCollider);
-            fader.FadeOut();
+            HandleTreeFall();
         }
 
         // Apply to camera
-        playerCamera.localRotation = Quaternion.Euler(
-            playerCamera.localRotation.eulerAngles.x,
-            playerCamera.localRotation.eulerAngles.y,
+        PlayerCamera.localRotation = Quaternion.Euler(
+            PlayerCamera.localRotation.eulerAngles.x,
+            PlayerCamera.localRotation.eulerAngles.y,
             currentTilt
         );
     }
@@ -86,24 +90,29 @@ public class BalanceZone : MonoBehaviour
             SetVerticalMovement(true);
         }
     }
+    private void HandleTreeFall()
+    {
+        if (finished) return;
+        
+        PlayerRB.isKinematic = false;
 
-    // private void OnTriggerExit(Collider other)
-    // {
-    //     if (other.CompareTag("Player"))
-    //     {
-    //         SetVerticalMovement(false);
-    //     }
-    // }
+        elapsed += Time.deltaTime;
+        float t = Mathf.Clamp01(elapsed / treeRotationDuration);
 
-    // private void ResetTilt()
-    // {
-    //     currentTilt = 0f;
-    //     playerCamera.localRotation = Quaternion.Euler(
-    //         playerCamera.localRotation.eulerAngles.x,
-    //         playerCamera.localRotation.eulerAngles.y,
-    //         0f
-    //     );
-    // }
+        float angle = Mathf.Sin(t * Mathf.PI * 0.5f) * MaxAngle;
+        
+        FallenTree.transform.localRotation = Quaternion.Euler(
+            FallenTree.transform.localEulerAngles.x,
+            FallenTree.transform.localEulerAngles.y,
+            angle);
+
+        if (t >= 1f)
+        {
+            finished = true;
+            PlayerRB.isKinematic = true;
+            fader.FadeOut();
+        }
+    }
 
     private void SetVerticalMovement(bool inZone)
     {
