@@ -2,24 +2,19 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    public CharacterController controller;
-    public Transform playerCamera;
+    [SerializeField] private CharacterController controller;
+    [SerializeField] private Transform playerCamera;
 
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    [SerializeField] private float speed = 3f;
+    [SerializeField] private float gravity = -30f;
+    [SerializeField] private float sensitivity = 400f;
 
-    public float speed = 3f;
-    public float gravity = -9.81f;
-
-    float xRotation = 0f;
-    public float sensitivity = 400f;
-
-    Vector3 velocity;
-    bool isGrounded;
+    private float xRotation;
+    private Vector3 velocity;
 
     [HideInInspector]
     public bool verticalMovement = false;
+    // public float gravity = -30f;
     
     void Start()
     {
@@ -37,13 +32,6 @@ public class PlayerMovement : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
 
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
-
         if (verticalMovement)
         {
             move = transform.forward * z;
@@ -58,11 +46,18 @@ public class PlayerMovement : MonoBehaviour
 
             transform.Rotate(Vector3.up * mouseX);
         }
-
-        controller.Move(Time.deltaTime * speed * move);
         
-        velocity.y += gravity * Time.deltaTime;
+        if (controller.isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+        else
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
 
-        controller.Move(velocity * Time.deltaTime);
+        move = (move * speed) + velocity;
+        
+        controller.Move(move * Time.deltaTime);
     }
 }

@@ -1159,15 +1159,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 1730710962}
   playerCamera: {fileID: 2096549503}
-  groundCheck: {fileID: 522974360}
-  groundDistance: 0.4
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 8
   speed: 4
+  gravity: -29.43
   sensitivity: 400
   verticalMovement: 0
-  gravity: -9.81
 --- !u!143 &1730710962
 CharacterController:
   m_ObjectHideFlags: 0

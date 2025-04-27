@@ -72,7 +72,7 @@ public class BalanceZone : MonoBehaviour
         // Fall
         if (Mathf.Abs(currentTilt) > MaxTilt)
         {
-            HandleTreeFall();
+            Fall();
         }
 
         // Apply to camera
@@ -90,12 +90,11 @@ public class BalanceZone : MonoBehaviour
             SetVerticalMovement(true);
         }
     }
-    private void HandleTreeFall()
+    
+    private void Fall()
     {
         if (finished) return;
         
-        PlayerRB.isKinematic = false;
-
         elapsed += Time.deltaTime;
         float t = Mathf.Clamp01(elapsed / treeRotationDuration);
 
@@ -105,12 +104,12 @@ public class BalanceZone : MonoBehaviour
             FallenTree.transform.localEulerAngles.x,
             FallenTree.transform.localEulerAngles.y,
             angle);
+        
+        fader.FadeOut();
 
         if (t >= 1f)
         {
             finished = true;
-            PlayerRB.isKinematic = true;
-            fader.FadeOut();
         }
     }
 
