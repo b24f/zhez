@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             move = transform.right * x + transform.forward * z;
+            
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 

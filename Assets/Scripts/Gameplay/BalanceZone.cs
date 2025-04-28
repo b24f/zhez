@@ -87,9 +87,25 @@ public class BalanceZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // Debug.Log("Entered Balance Zone");
             SetVerticalMovement(true);
         }
     }
+
+    // private void OnTriggerExit(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         Debug.Log("Left Balance Zone");
+    //         PlayerCamera.localRotation = Quaternion.Euler(
+    //             PlayerCamera.localRotation.eulerAngles.x,
+    //             PlayerCamera.localRotation.eulerAngles.y,
+    //             30f
+    //         );
+    //         
+    //         Fall();
+    //     }
+    // }
     
     private void Fall()
     {
