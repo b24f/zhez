@@ -6,11 +6,23 @@ namespace Dialogues
 {
     public class DialoguePanelComponent: MonoBehaviour
     {
-        [SerializeField] private String text;
+        public static DialoguePanelComponent Current;
+
+        private Label label;
+        
+        private void Awake()
+        {
+            Current = this;
+        }
+        
         private void OnEnable()
         {
             var root = GetComponent<UIDocument>().rootVisualElement;
-            var label = root.Q<Label>("dialogue-text");
+            label = root.Q<Label>("dialogue-text");
+        }
+
+        public void Show(String text)
+        {
             label.text = text;
         }
     }
