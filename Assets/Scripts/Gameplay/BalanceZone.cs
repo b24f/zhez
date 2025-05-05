@@ -31,12 +31,12 @@ public class BalanceZone : MonoBehaviour
         fader = FindObjectOfType<ScreenFader>();
     }
 
-    private void FixedUpdate()
-    {
-        if (!playerInZone) return;
-
-        HandleBalance();
-    }
+    // private void FixedUpdate()
+    // {
+    //     if (!playerInZone) return;
+    //
+    //     HandleBalance();
+    // }
 
     private void HandleBalance()
     {
@@ -88,8 +88,8 @@ public class BalanceZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // Debug.Log("Entered Balance Zone");
-            SetVerticalMovement(true);
+            Debug.Log("Entered Balance Zone");
+            Fall();
         }
     }
 
@@ -110,7 +110,7 @@ public class BalanceZone : MonoBehaviour
     
     private void Fall()
     {
-        if (finished) return;
+        // if (finished) return;
         
         elapsed += Time.deltaTime;
         float t = Mathf.Clamp01(elapsed / treeRotationDuration);
@@ -121,6 +121,8 @@ public class BalanceZone : MonoBehaviour
             FallenTree.transform.localEulerAngles.x,
             FallenTree.transform.localEulerAngles.y,
             angle);
+        
+        PlayerRB.isKinematic = false;
         
         fader.FadeOut();
 

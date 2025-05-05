@@ -13,7 +13,7 @@ namespace Player
         PlayerInput playerInput;
         InputAction sprintAction;
 
-        void Awake()
+        private void Awake()
         {
             player = GetComponent<Player>();
             playerInput = GetComponent<PlayerInput>();
@@ -23,7 +23,7 @@ namespace Player
         private void OnEnable() => player.OnBeforeMove += OnBeforeMove;
         private void OnDisable() => player.OnBeforeMove -= OnBeforeMove;
 
-        void OnBeforeMove()
+        private void OnBeforeMove()
         {
             var sprintInput = sprintAction.ReadValue<float>();
             
@@ -33,7 +33,8 @@ namespace Player
                 Vector3.Dot(player.transform.forward, player.velocity.normalized)   
             );
             var multiplier = Mathf.Lerp(1f, speedMultiplier, forwardMovementFactor);
-            player.movementSpeedMultiplier *= multiplier;
+            
+            player.MovementSpeedMultiplier *= multiplier;
         }
     }
 }

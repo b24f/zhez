@@ -21,14 +21,14 @@ namespace Player
 
         private bool IsCrouching => standingHeight - currentHeight > 0.1f;
         
-        void Awake()
+        private void Awake()
         {
             player = GetComponent<Player>();
             playerInput = GetComponent<PlayerInput>();
             crouchAction = playerInput.actions["crouch"];
         }
 
-        void Start()
+        private void Start()
         {
             initialCameraPosition = player.cameraTransform.localPosition;
             standingHeight = currentHeight = player.Height;
@@ -37,7 +37,7 @@ namespace Player
         private void OnEnable() => player.OnBeforeMove += OnBeforeMove;
         private void OnDisable() => player.OnBeforeMove -= OnBeforeMove;
 
-        void OnBeforeMove()
+        private void OnBeforeMove()
         {
             var isTryingToCrouch = crouchAction.ReadValue<float>() > 0;
             
@@ -70,7 +70,7 @@ namespace Player
 
             if (IsCrouching)
             {
-                player.movementSpeedMultiplier *= crouchSpeedMultiplier;
+                player.MovementSpeedMultiplier *= crouchSpeedMultiplier;
             }
         }
     }

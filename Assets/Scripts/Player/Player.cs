@@ -15,7 +15,7 @@ namespace Player
 
         public event Action OnBeforeMove;
         
-        internal float movementSpeedMultiplier;
+        internal float MovementSpeedMultiplier;
 
         public float Height
         {
@@ -45,6 +45,8 @@ namespace Player
         }
         private void Update()
         {
+            MovementSpeedMultiplier = 1f;
+            
             UpdateGravity();
             UpdateMovement();
             UpdateLook();
@@ -52,29 +54,27 @@ namespace Player
 
         private void UpdateGravity()
         {
-            var gravity = Physics.gravity * mass * Time.deltaTime;
+            var gravity = Time.deltaTime * mass * Physics.gravity;
             velocity.y = controller.isGrounded ? -1f : velocity.y + gravity.y;
         }
 
         Vector3 GetMovementInput()
         {
-            movementSpeedMultiplier = 1f;
-            OnBeforeMove?.Invoke();
-            
             var moveInput = moveAction.ReadValue<Vector2>();
-
             var input = new Vector3();
             input += transform.forward * moveInput.y;
             input += transform.right * moveInput.x;
             input = Vector3.ClampMagnitude(input, 1);
             
-            input *= movementSpeed * movementSpeedMultiplier;
+            input *= movementSpeed * MovementSpeedMultiplier;
             
             return input;
         }
 
         private void UpdateMovement()
         {
+            OnBeforeMove?.Invoke();
+            
             var input = GetMovementInput();
             
             var factor = acceleration * Time.deltaTime;
