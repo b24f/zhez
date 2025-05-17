@@ -12,11 +12,6 @@ namespace Core
             Current = this;
         }
         
-        public void LoadScene(string sceneName)
-        {
-            SceneManager.LoadScene(sceneName);
-        }
-        
         public void StartAsyncLoad(string sceneName)
         {
             StartCoroutine(LoadAsyncScene(sceneName));

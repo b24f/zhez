@@ -12,10 +12,6 @@ GameObject:
   - component: {fileID: 3732968109720743925}
   - component: {fileID: 1324775999676256214}
   - component: {fileID: 8175036655574495962}
-  - component: {fileID: 8021535169181766079}
-  - component: {fileID: 7348633883355721618}
-  - component: {fileID: 8628921914723323309}
-  - component: {fileID: 5248025292588032005}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -82,6 +78,8 @@ MonoBehaviour:
   movementSpeed: 3
   mass: 1
   acceleration: 20
+  cameraPivot: {fileID: 8464657589786177048}
+  state: 0
 --- !u!114 &8175036655574495962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,62 +111,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &8021535169181766079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 367629604222747576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26046707412e427f8eb0417606cfdaca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speedMultiplier: 1.5
---- !u!114 &7348633883355721618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 367629604222747576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a22b596e3f2d4844a27a1ee3273e5e5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crouchHeight: 1
-  crouchTransitionSpeed: 10
-  crouchSpeedMultiplier: 0.5
---- !u!114 &8628921914723323309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 367629604222747576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e51a29bfe124a14a22f5cf72a28eae2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speedMultiplier: 0.5
---- !u!114 &5248025292588032005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 367629604222747576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7257a03f3d744a5a968790a3a9dd458b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraPivot: {fileID: 8464657589786177048}
-  maxPeekAngle: 20
-  peekSpeed: 5
 --- !u!1 &651895663078892435
 GameObject:
   m_ObjectHideFlags: 0
