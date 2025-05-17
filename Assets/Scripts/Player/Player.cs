@@ -35,8 +35,9 @@ namespace Player
         
         internal float MovementSpeedMultiplier;
 
-        private State state = State.Walking;
-        private enum State
+        public State? ForcedState = null;
+        public State state = State.Walking;
+        public enum State
         {
             Walking,
             Sprinting,
@@ -109,6 +110,12 @@ namespace Player
         private void UpdateStateFromInput()
         {
             State desiredState;
+
+            if (ForcedState != null)
+            {
+                state = (State)ForcedState;
+                return;
+            }
             
             if (sprintAction.ReadValue<float>() > 0)
             {

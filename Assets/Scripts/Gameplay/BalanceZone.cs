@@ -21,11 +21,24 @@ namespace Gameplay {
             if (other.CompareTag("Player"))
             {
                 StartCoroutine(Fall());
+                var player = other.GetComponent<Player.Player>();
+                player.ForcedState = Player.Player.State.Sneaking;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                var player = other.GetComponent<Player.Player>();
+                player.ForcedState = null;
             }
         }
         
         private IEnumerator Fall()
         {
+            yield return new WaitForSeconds(2f);
+            
             var elapsed = 0f;
             
             fader.FadeOut();
