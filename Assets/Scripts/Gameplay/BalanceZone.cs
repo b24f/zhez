@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Core;
 
 namespace Gameplay {
     public class BalanceZone : MonoBehaviour
@@ -37,7 +38,7 @@ namespace Gameplay {
         
         private IEnumerator Fall()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
             
             var elapsed = 0f;
             
@@ -60,6 +61,8 @@ namespace Gameplay {
 
                 yield return null;
             }
+            
+            SceneLoader.Current.StartAsyncLoad("MainScene");
         }
     }
 }
