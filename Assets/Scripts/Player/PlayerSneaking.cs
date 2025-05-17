@@ -4,19 +4,19 @@ using UnityEngine.InputSystem;
 namespace Player
 {
     [RequireComponent(typeof(Player))]
-    public class PlayerSlowWalking: MonoBehaviour
+    public class PlayerSneaking: MonoBehaviour
     {
         [SerializeField] private float speedMultiplier = 0.5f;
 
         private Player player;
         PlayerInput playerInput;
-        private InputAction slowWalkAction;
+        private InputAction sneakInput;
         
         private void Awake()
         {
             player = GetComponent<Player>();
             playerInput = GetComponent<PlayerInput>();
-            slowWalkAction = playerInput.actions["walk"];
+            sneakInput = playerInput.actions["sneak"];
         }
 
         private void OnEnable() => player.OnBeforeMove += OnBeforeMove;
@@ -24,9 +24,9 @@ namespace Player
 
         private void OnBeforeMove()
         {
-            var isSlowWalking = slowWalkAction.ReadValue<float>() > 0;
+            var isSneaking = sneakInput.ReadValue<float>() > 0;
 
-            if (isSlowWalking)
+            if (isSneaking)
             {
                 player.MovementSpeedMultiplier *= speedMultiplier;
             }
