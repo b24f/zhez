@@ -191,7 +191,7 @@ namespace Player
             {
                 input.x *= .5f;
                 input.z *= .5f;
-
+                
                 if (Mathf.Abs(input.y) > .2f)
                 {
                     input.y = Mathf.Sign(input.y) * climbingSpeed;

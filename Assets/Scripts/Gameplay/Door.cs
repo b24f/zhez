@@ -28,7 +28,7 @@ namespace Gameplay
            
            currentRotation = Mathf.Clamp(currentRotation, 0, MaxOpenAngle);
            
-           Quaternion targetRotation = Quaternion.Euler(0, currentRotation, 0);
+           Quaternion targetRotation = Quaternion.Euler(0, -currentRotation, 0);
            
            pivot.rotation = targetRotation;
         }

@@ -8,8 +8,6 @@ namespace Gameplay
         {
             if (other.CompareTag("Player") && other.TryGetComponent<Player.Player>(out var player))
             {
-                Debug.Log("Ladder entered");
-                // var player = other.GetComponent<Player.Player>();
                 player.ForcedState = Player.Player.State.Climbing;
             }
         }
@@ -18,7 +16,6 @@ namespace Gameplay
         {
             if (other.CompareTag("Player") && other.TryGetComponent<Player.Player>(out var player))
             {
-                Debug.Log("Ladder exited");
                 player.ForcedState = null;
             }
         }
