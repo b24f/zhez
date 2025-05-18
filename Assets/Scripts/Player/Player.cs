@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Player
 {
@@ -13,6 +17,10 @@ namespace Player
         [SerializeField] private float movementSpeed = 4f;
         [SerializeField] private float mass = 1f;
         [SerializeField] private float acceleration = 20f;
+        
+        // Climbing start
+        [SerializeField] private float climbingSpeed = 2f;
+        // Climbing end
         
         // Peeking start
         [SerializeField] private Transform cameraPivot;
@@ -36,7 +44,18 @@ namespace Player
         internal float MovementSpeedMultiplier;
 
         public State? ForcedState = null;
-        public State state = State.Walking;
+        
+        private State state = State.Walking;
+
+        private State CurrentState
+        {
+            get => state;
+            set
+            {
+                state = value;
+                velocity = Vector3.zero;
+            }
+        }
         public enum State
         {
             Walking,
@@ -44,6 +63,7 @@ namespace Player
             Sneaking,
             Peeking,
             Crouching,
+            Climbing,
         }
 
         public float Height
@@ -88,21 +108,21 @@ namespace Player
             MovementSpeedMultiplier = 1f;
             
             UpdateStateFromInput();
-            UpdateGravity();
             UpdateByState();
-            UpdateDefault();
             UpdateLook();
+            UpdateGravity();
+            UpdateDefault();
         }
 
         private bool CanChangeState(State newState)
         {
-            if (state == newState) return false;
+            if (CurrentState == newState) return false;
             
-            if (state == State.Sneaking && newState == State.Sprinting) return false;
+            if (CurrentState == State.Sneaking && newState == State.Sprinting) return false;
             
-            if (state == State.Crouching && (newState == State.Sprinting || newState == State.Sneaking)) return false;
+            if (CurrentState == State.Crouching && (newState == State.Sprinting || newState == State.Sneaking)) return false;
             
-            // if (state == State.Peeking && (newState == State.Crouching || newState == State.Sneaking || newState == State.Sprinting)) return false;
+            // if (CurrentState == State.Peeking && (newState == State.Crouching || newState == State.Sneaking || newState == State.Sprinting)) return false;
             
             return true;
         }
@@ -111,9 +131,10 @@ namespace Player
         {
             State desiredState;
 
+            // Debug.Log($"ForcedState: {ForcedState}");
             if (ForcedState != null)
             {
-                state = (State)ForcedState;
+                CurrentState = (State)ForcedState;
                 return;
             }
             
@@ -135,13 +156,14 @@ namespace Player
 
             if (CanChangeState(desiredState))
             {
-                state = desiredState;
+                CurrentState = desiredState;
             }
         }
 
         private void UpdateByState()
         {
-            switch (state)
+            // Debug.Log($"Current State: {CurrentState}");
+            switch (CurrentState)
             {
                 case State.Sprinting:
                     UpdateSprinting();
@@ -151,14 +173,41 @@ namespace Player
                     break;
                 case State.Crouching:
                     UpdateCrouching();
-                    // UpdatePeeking();
                     break;
-                // case State.Peeking:
-                //     break;
+                case State.Climbing:
+                    UpdateClimbing();
+                    break;
                 default:
                     UpdateWalking();
                     break;
             }
+        }
+
+        private void UpdateClimbing()
+        {
+            var input = GetMovementInput(climbingSpeed, false);
+            var forwardInputFactor = Vector3.Dot(transform.forward, input.normalized);
+            if (forwardInputFactor > 0)
+            {
+                input.x *= .5f;
+                input.z *= .5f;
+
+                if (Mathf.Abs(input.y) > .2f)
+                {
+                    input.y = Mathf.Sign(input.y) * climbingSpeed;
+                }
+            }
+            else
+            {
+                input.y = 0;
+                input.x *= 3f;
+                input.z *= 3f;
+            }
+            
+            var factor = acceleration * Time.deltaTime;
+            velocity = Vector3.Lerp(velocity, input, factor);
+            
+            controller.Move(velocity * Time.deltaTime);
         }
 
         private void UpdateSneaking()
@@ -191,22 +240,25 @@ namespace Player
             velocity.y = controller.isGrounded ? -1f : velocity.y + gravity.y;
         }
 
-        Vector3 GetMovementInput()
+        Vector3 GetMovementInput(float speed, bool horizontal = true)
         {
             var moveInput = moveAction.ReadValue<Vector2>();
             var input = new Vector3();
-            input += transform.forward * moveInput.y;
-            input += transform.right * moveInput.x;
+            
+            var referenceTransform = horizontal ? transform : cameraTransform; 
+            
+            input += referenceTransform.forward * moveInput.y;
+            input += referenceTransform.right * moveInput.x;
             input = Vector3.ClampMagnitude(input, 1);
             
-            input *= movementSpeed * MovementSpeedMultiplier;
+            input *= speed * MovementSpeedMultiplier;
             
             return input;
         }
 
         private void ApplyBasicMovement()
         {
-            var input = GetMovementInput();
+            var input = GetMovementInput(movementSpeed);
             
             var factor = acceleration * Time.deltaTime;
             velocity.x = Mathf.Lerp(velocity.x, input.x, factor);
@@ -230,10 +282,10 @@ namespace Player
         private void UpdateDefault()
         {
             // Determine target height based on current state
-            float targetHeight = (state == State.Crouching) ? crouchHeight : standingHeight;
+            float targetHeight = (CurrentState == State.Crouching) ? crouchHeight : standingHeight;
 
             // If standing up (not crouching), check for ceiling obstruction to prevent clipping
-            if (IsCrouching && state != State.Crouching)
+            if (IsCrouching && CurrentState != State.Crouching)
             {
                 var castOrigin = transform.position + new Vector3(0, currentHeight / 2, 0);
                 if (Physics.Raycast(castOrigin, Vector3.up, out RaycastHit hit, 0.2f))
@@ -270,7 +322,7 @@ namespace Player
         // private void UpdatePeeking()
         // {
         //     var peekInput = peekAction.ReadValue<float>();
-        //     var angle = (state == State.Peeking) ? peekInput * maxPeekAngle : 0;
+        //     var angle = (CurrentState == State.Peeking) ? peekInput * maxPeekAngle : 0;
         //                 
         //     currentZRotation = Mathf.Lerp(currentZRotation, angle, Time.deltaTime * peekSpeed);
         //     cameraPivot.localRotation = Quaternion.Euler(0f, 0f, currentZRotation);
