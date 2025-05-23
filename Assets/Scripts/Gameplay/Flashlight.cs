@@ -14,6 +14,7 @@ namespace Gameplay
         [SerializeField] private float rechargeAmount = 2f;
         
         private bool isOn;
+        private const float Intensity = 10f;
 
         private void OnEnable()
         {
@@ -50,7 +51,7 @@ namespace Gameplay
             battery -= batteryDrainRate * Time.deltaTime;
             battery = Mathf.Max(battery, 0);
             
-            flashlight.intensity = Mathf.Lerp(0, 3f, battery / maxBattery);
+            flashlight.intensity = Mathf.Lerp(0, Intensity, battery / maxBattery);
         }
 
         private void RechargeBattery()
@@ -58,7 +59,7 @@ namespace Gameplay
             battery += rechargeAmount;
             battery = Mathf.Clamp(battery, 0f, maxBattery);
             
-            flashlight.intensity = Mathf.Lerp(0f, 3f, battery / maxBattery);
+            flashlight.intensity = Mathf.Lerp(0f, Intensity, battery / maxBattery);
         }
 
         private void FlickerBattery()
