@@ -5,6 +5,8 @@ public class InteractionPrompt : MonoBehaviour
     [SerializeField] private CanvasGroup promptCanvasGroup;
     [SerializeField] private float fadeDuration = 0.3f;
     [SerializeField] private float activationDistance = 2f;
+    [SerializeField] private bool destroyAfterInteraction = false;
+    [SerializeField] private GameObject journalPage;
 
     private Transform player;
     private bool isVisible = false;
@@ -28,10 +30,17 @@ public class InteractionPrompt : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(FadeCanvasGroup(promptCanvasGroup, isVisible ? 1f : 0f));
         }
-
-        if (isVisible && Input.GetKeyDown(KeyCode.E))
+        
+        if (isVisible && Input.GetKeyDown(KeyCode.E) && distance <= 1.5f)
         {
-            Debug.Log("Interacted with: " + gameObject.name);
+            journalPage.SetActive(true);
+            Time.timeScale = 0;
+        }
+
+        if (journalPage.activeInHierarchy && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 1f;
+            journalPage.SetActive(false);
         }
     }
 
