@@ -53,7 +53,7 @@ namespace Player
             set
             {
                 state = value;
-                velocity = Vector3.zero;
+                // velocity = Vector3.zero;
             }
         }
         public enum State
@@ -103,6 +103,16 @@ namespace Player
             initialCameraPosition = cameraTransform.localPosition;
             standingHeight = currentHeight = Height;
         }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            int layer = hit.gameObject.layer;
+            string layerName = LayerMask.LayerToName(layer);
+            
+            // Debug.Log($"Current State: {CurrentState}");
+            ForcedState = layerName == "LongStairs" ? State.Sneaking : null;
+        }
+        
         private void Update()
         {
             MovementSpeedMultiplier = 1f;
@@ -130,7 +140,6 @@ namespace Player
         private void UpdateStateFromInput()
         {
             State desiredState;
-
             // Debug.Log($"ForcedState: {ForcedState}");
             if (ForcedState != null)
             {
@@ -213,7 +222,6 @@ namespace Player
         private void UpdateSneaking()
         {
             MovementSpeedMultiplier *= 0.5f;
-            
             ApplyBasicMovement();
         }
 
@@ -242,6 +250,7 @@ namespace Player
 
         Vector3 GetMovementInput(float speed, bool horizontal = true)
         {
+            // Debug.Log($"Speed: {speed}, horizontal: {horizontal}");
             var moveInput = moveAction.ReadValue<Vector2>();
             var input = new Vector3();
             
@@ -263,7 +272,7 @@ namespace Player
             var factor = acceleration * Time.deltaTime;
             velocity.x = Mathf.Lerp(velocity.x, input.x, factor);
             velocity.z = Mathf.Lerp(velocity.z, input.z, factor);
-            
+            // Debug.Log($"Velocity: {velocity}");
             controller.Move(velocity * Time.deltaTime);
         }
 
