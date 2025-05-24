@@ -1,61 +1,54 @@
 ﻿using UnityEngine;
+using Core;
 
-public class InteractionPrompt : MonoBehaviour
+namespace UIComponents
 {
-    [SerializeField] private CanvasGroup promptCanvasGroup;
-    [SerializeField] private float fadeDuration = 0.3f;
-    [SerializeField] private float activationDistance = 2f;
-    [SerializeField] private bool destroyAfterInteraction = false;
-    [SerializeField] private GameObject journalPage;
-
-    private Transform player;
-    private bool isVisible = false;
-
-    private void Start()
+    public class InteractionPrompt : MonoBehaviour
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        promptCanvasGroup.alpha = 0f;
-    }
+        [SerializeField] private CanvasGroup promptCanvasGroup;
+        [SerializeField] private float fadeDuration = 0.3f;
+        [SerializeField] private float activationDistance = 2f;
+        [SerializeField] private bool destroyAfterInteraction = false;
+        [SerializeField] private Transform playerTransform;
 
-    private void Update()
-    {
-        if (player == null) return;
+        private bool isVisible;
 
-        float distance = Vector3.Distance(transform.position, player.position);
-        bool shouldShow = distance <= activationDistance;
-
-        if (shouldShow != isVisible)
+        private void Start()
         {
-            isVisible = shouldShow;
-            StopAllCoroutines();
-            StartCoroutine(FadeCanvasGroup(promptCanvasGroup, isVisible ? 1f : 0f));
-        }
-        
-        if (isVisible && Input.GetKeyDown(KeyCode.E) && distance <= 1.5f)
-        {
-            journalPage.SetActive(true);
-            Time.timeScale = 0;
+            promptCanvasGroup.alpha = 0f;
         }
 
-        if (journalPage.activeInHierarchy && Input.GetKeyDown(KeyCode.Escape))
+        private void Update()
         {
-            Time.timeScale = 1f;
-            journalPage.SetActive(false);
+            var distance = Vector3.Distance(transform.position, playerTransform.position);
+            var shouldShow = distance <= activationDistance;
+
+            if (shouldShow != isVisible)
+            {
+                isVisible = shouldShow;
+                StopAllCoroutines();
+                StartCoroutine(FadeCanvasGroup(promptCanvasGroup, isVisible ? 1f : 0f));
+            }
+            
+            if (isVisible && Input.GetKeyDown(KeyCode.E) && distance <= 1.5f)
+            {
+                EventEmitter.EmitStateChange(GameState.Current.state == Types.State.Examine ? Types.State.Play : Types.State.Examine);
+            }
         }
-    }
 
-    private System.Collections.IEnumerator FadeCanvasGroup(CanvasGroup cg, float targetAlpha)
-    {
-        float startAlpha = cg.alpha;
-        float time = 0f;
-
-        while (time < fadeDuration)
+        private System.Collections.IEnumerator FadeCanvasGroup(CanvasGroup cg, float targetAlpha)
         {
-            time += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
-            yield return null;
-        }
+            var startAlpha = cg.alpha;
+            var time = 0f;
 
-        cg.alpha = targetAlpha;
+            while (time < fadeDuration)
+            {
+                time += Time.deltaTime;
+                cg.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+                yield return null;
+            }
+
+            cg.alpha = targetAlpha;
+        }
     }
 }

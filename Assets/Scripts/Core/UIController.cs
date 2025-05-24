@@ -1,40 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class UIController : MonoBehaviour
+namespace Core
 {
-    public static UIController Current;
-
-    [SerializeField] private GameObject HUDComponent;
-    [SerializeField] private GameObject MenuComponent;
-    // [SerializeField] private GameObject DialoguePanelComponent;
-   
-    private void Awake()
+    public class UIController : MonoBehaviour
     {
-        Current = this;
-    }
+        public static UIController Current;
 
-    public void Reset()
-    {
-        MenuComponent.SetActive(false);
-        // DialoguePanelComponent.SetActive(false);
-    }
+        [SerializeField] private GameObject HUDComponent;
+        [SerializeField] private GameObject MenuComponent;
+        [SerializeField] private GameObject ExamineComponent;
+       
+        private void Awake()
+        {
+            Current = this;
+        }
 
-    public void RenderMenu()
-    {
-        Reset();
-        MenuComponent.SetActive(true);
-    }
+        public void Reset()
+        {
+            MenuComponent.SetActive(false);
+            HUDComponent.SetActive(false);
+            ExamineComponent.SetActive(false);
+        }
 
-    // public void RenderDialogue()
-    // {
-    //     // Reset();
-    //     DialoguePanelComponent.SetActive(true);
-    // }
-    //
-    // public void DestroyDialogue()
-    // {
-    //     DialoguePanelComponent.SetActive(false);
-    // }
+        public void RenderMenu()
+        {
+            Reset();
+            MenuComponent.SetActive(true);
+        }
+
+        public void RenderHUD()
+        {
+            Reset();
+            HUDComponent.SetActive(true);
+        }
+
+        public void RenderExamine()
+        {
+            Reset();
+            ExamineComponent.SetActive(true);
+        }
+    }
 }

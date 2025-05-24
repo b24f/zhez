@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Quaternion = UnityEngine.Quaternion;
-using Random = UnityEngine.Random;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
+using Core;
 
 namespace Player
 {
@@ -23,10 +19,10 @@ namespace Player
         // Climbing end
         
         // Peeking start
-        [SerializeField] private Transform cameraPivot;
-        private float maxPeekAngle = 20f;
-        private float peekSpeed = 5f;
-        private float currentZRotation;
+        // [SerializeField] private Transform cameraPivot;
+        // private float maxPeekAngle = 20f;
+        // private float peekSpeed = 5f;
+        // private float currentZRotation;
         // Peeking end
         
         // Crouching start
@@ -61,7 +57,7 @@ namespace Player
             Walking,
             Sprinting,
             Sneaking,
-            Peeking,
+            // Peeking,
             Crouching,
             Climbing,
         }
@@ -115,6 +111,8 @@ namespace Player
         
         private void Update()
         {
+            if (GameState.Current.state == Types.State.Menu) return;
+            
             MovementSpeedMultiplier = 1f;
             
             UpdateStateFromInput();

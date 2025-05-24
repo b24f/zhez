@@ -4,6 +4,7 @@ namespace Types
 	{
 		Play,
 		Menu,
+		Examine,
 		None,
 	}
 }
