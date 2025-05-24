@@ -131,7 +131,7 @@ namespace Player
             if (GameState.Current.state == Types.State.Menu) return;
             
             MovementSpeedMultiplier = 1f;
-            Debug.Log($"Stamina: {stamina:F1}, Exhausted: {staminaExhausted}, Cooldown: {staminaCooldownTimer:F2}");
+            // Debug.Log($"Stamina: {stamina:F1}, Exhausted: {staminaExhausted}, Cooldown: {staminaCooldownTimer:F2}");
 
             UpdateStateFromInput();
             UpdateByState();

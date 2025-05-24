@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Core;
 
 namespace UIComponents
@@ -10,7 +11,8 @@ namespace UIComponents
         [SerializeField] private float activationDistance = 2f;
         [SerializeField] private bool destroyAfterInteraction = false;
         [SerializeField] private Transform playerTransform;
-
+        [SerializeField] private string id;
+        
         private bool isVisible;
 
         private void Start()
@@ -33,6 +35,7 @@ namespace UIComponents
             if (isVisible && Input.GetKeyDown(KeyCode.E) && distance <= 1.5f)
             {
                 EventEmitter.EmitStateChange(GameState.Current.state == Types.State.Examine ? Types.State.Play : Types.State.Examine);
+                EventEmitter.EmitPageOpen(id);
             }
         }
 
