@@ -39,7 +39,7 @@ namespace Core
 
         private void OnStateChange(State state)
         {
-            State previousState = GameState.Current.state;
+            var previousState = GameState.Current.state;
 
             if (state == previousState) return;
 

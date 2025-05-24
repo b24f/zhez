@@ -18,6 +18,17 @@ namespace Player
         [SerializeField] private float climbingSpeed = 2f;
         // Climbing end
         
+        // Sprinting start
+        private const float MaxStamina = 100f;
+        private const float StaminaDrainRate = 25f;
+        private const float StaminaRegenRate = 15f;
+        [SerializeField] private float staminaCooldownDuration = 5f;
+        private bool staminaExhausted;
+        private float staminaCooldownTimer;
+        private float stamina;
+        public float StaminaPercentage => Mathf.RoundToInt((stamina / MaxStamina) * 100f);
+        // Sprinting end
+        
         // Peeking start
         // [SerializeField] private Transform cameraPivot;
         // private float maxPeekAngle = 20f;
@@ -80,6 +91,8 @@ namespace Player
         // InputAction peekAction;
         InputAction crouchAction;
 
+        public static Player Current;
+
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
@@ -90,6 +103,8 @@ namespace Player
             sneakAction = playerInput.actions["sneak"];
             // peekAction = playerInput.actions["peek"];
             crouchAction = playerInput.actions["crouch"];
+            
+            Current = this;
         }
 
         private void Start()
@@ -98,6 +113,8 @@ namespace Player
             // Crouching
             initialCameraPosition = cameraTransform.localPosition;
             standingHeight = currentHeight = Height;
+            
+            stamina = MaxStamina; // Initialize stamina
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -114,10 +131,12 @@ namespace Player
             if (GameState.Current.state == Types.State.Menu) return;
             
             MovementSpeedMultiplier = 1f;
-            
+            Debug.Log($"Stamina: {stamina:F1}, Exhausted: {staminaExhausted}, Cooldown: {staminaCooldownTimer:F2}");
+
             UpdateStateFromInput();
             UpdateByState();
             UpdateLook();
+            UpdateStaminaCooldown();
             UpdateGravity();
             UpdateDefault();
         }
@@ -144,8 +163,8 @@ namespace Player
                 CurrentState = (State)ForcedState;
                 return;
             }
-            
-            if (sprintAction.ReadValue<float>() > 0)
+
+            if (sprintAction.ReadValue<float>() > 0 && stamina > 0f && !staminaExhausted)
             {
                 desiredState = State.Sprinting;
             } else if (sneakAction.ReadValue<float>() > 0)
@@ -230,12 +249,30 @@ namespace Player
 
         private void UpdateSprinting()
         {
+            if (staminaExhausted)
+            {
+                CurrentState = State.Walking;
+                return;
+            }
+
             var forwardMovementFactor = Mathf.Clamp01(
                 Vector3.Dot(transform.forward, velocity.normalized)   
             );
             var multiplier = Mathf.Lerp(1f, 2f, forwardMovementFactor);
             
             MovementSpeedMultiplier *= multiplier;
+            
+            stamina -= StaminaDrainRate * Time.deltaTime;
+            stamina = Mathf.Max(0f, stamina);
+
+            if (stamina <= 0f)
+            {
+                staminaExhausted = true;
+                staminaCooldownTimer = staminaCooldownDuration;
+                CurrentState = State.Walking;
+
+                return;
+            }
 
             ApplyBasicMovement();
         }
@@ -248,7 +285,6 @@ namespace Player
 
         Vector3 GetMovementInput(float speed, bool horizontal = true)
         {
-            // Debug.Log($"Speed: {speed}, horizontal: {horizontal}");
             var moveInput = moveAction.ReadValue<Vector2>();
             var input = new Vector3();
             
@@ -322,8 +358,29 @@ namespace Player
         private void UpdateCrouching()
         {
             MovementSpeedMultiplier *= crouchSpeedMultiplier;
-            
             ApplyBasicMovement();
+        }
+        
+        private void RegenerateStamina()
+        {
+            stamina += StaminaRegenRate * Time.deltaTime;
+            stamina = Mathf.Min(MaxStamina, stamina);
+        }
+        
+        private void UpdateStaminaCooldown()
+        {
+            if (staminaExhausted)
+            {
+                staminaCooldownTimer -= Time.deltaTime;
+                if (staminaCooldownTimer <= 0f)
+                {
+                    staminaExhausted = false;
+                }
+            }
+            else if (CurrentState != State.Sprinting)
+            {
+                RegenerateStamina();
+            }
         }
 
         // private void UpdatePeeking()

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Gameplay
 {
@@ -15,6 +17,15 @@ namespace Gameplay
         
         private bool isOn;
         private const float Intensity = 10f;
+        
+        public float BatteryPercentage => Mathf.RoundToInt((battery / maxBattery) * 100f);
+
+        public static Flashlight Current;
+        
+        private void Awake()
+        {
+            Current = this;
+        }
 
         private void OnEnable()
         {

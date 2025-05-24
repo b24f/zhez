@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class HUD : MonoBehaviour
+namespace UIComponents
 {
-    // Start is called before the first frame update
-    void Start()
+    public class HUD : MonoBehaviour
     {
+        [SerializeField] protected UIDocument document;
         
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        private ProgressBar staminaBar;
+        private ProgressBar batteryBar;
+        private void OnEnable()
+        {
+            staminaBar = document.rootVisualElement.Q<ProgressBar>("stamina-bar");
+            batteryBar = document.rootVisualElement.Q<ProgressBar>("battery-bar");
+        }
         
+        private void Update()
+        {
+            var batteryPercentage = Gameplay.Flashlight.Current.BatteryPercentage;
+            var staminaPercentage = Player.Player.Current.StaminaPercentage;
+            
+            batteryBar.value = batteryPercentage;
+            staminaBar.value = staminaPercentage;
+        }
     }
 }
