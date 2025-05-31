@@ -17258,12 +17258,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95488c6385c948a386904f638e99be1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sightRange: 15
+  sightAngle: 120
+  hearingRange: 45
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  chaseSpeed: 6
+  patrolSpeed: 3
+  searchTime: 5
+  searchRadius: 10
   player: {fileID: 5470756253393038250}
-  viewAngle: 100
-  losePlayerAfterSeconds: 3
-  wanderRadius: 10
-  idleTimeRange: {x: 3, y: 8}
-  animator: {fileID: 1974289239}
+  patrolRadius: 5
+  currentState: 0
 --- !u!195 &1974289238
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -17286,12 +17293,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!95 &1974289239 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: f6d88d1797444e94fa7ee6449e38252b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1974289235}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2040957034
 GameObject:
   m_ObjectHideFlags: 0
