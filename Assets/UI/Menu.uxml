@@ -6,5 +6,8 @@
         <ui:Label tabindex="-1" text="F - toggle flashlight" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-font-style: bold; font-size: 20px;" />
         <ui:Label tabindex="-1" text="R - spam to recharge battery" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-font-style: bold; font-size: 20px;" />
         <ui:Label tabindex="-1" text="E - interact" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-font-style: bold; font-size: 20px;" />
+        <ui:Label tabindex="-1" text="Esc - pause" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-font-style: bold; font-size: 20px;" />
+        <ui:Label tabindex="-1" text="Alt + F4 - quit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-font-style: bold; font-size: 20px;" />
     </ui:VisualElement>
+    <ui:VisualElement tabindex="-1" style="flex-grow: 1; justify-content: center; opacity: 1; background-color: rgba(0, 0, 0, 0.59); width: auto; position: absolute; left: 0; top: 0; right: 1px; bottom: 0;" />
 </ui:UXML>

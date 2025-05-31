@@ -274,6 +274,8 @@ namespace Player
                 return;
             }
 
+            MakeNoise();
+
             ApplyBasicMovement();
         }
 
@@ -391,5 +393,21 @@ namespace Player
         //     currentZRotation = Mathf.Lerp(currentZRotation, angle, Time.deltaTime * peekSpeed);
         //     cameraPivot.localRotation = Quaternion.Euler(0f, 0f, currentZRotation);
         // }
+        
+        [SerializeField] private float noiseRadius = 10f;
+        private readonly Collider[] colliders = new Collider[10];
+
+        private void MakeNoise()
+        {
+            var count = Physics.OverlapSphereNonAlloc(transform.position, noiseRadius, colliders);
+
+            for (var i = 0; i < count; i++)
+            {
+                if (colliders[i].CompareTag("Player"))
+                {
+                    Zhez.Zhez.Current.HearNoise(transform.position);
+                }
+            }
+        }
     }
 }
