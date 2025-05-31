@@ -7705,6 +7705,55 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &740800152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 740800153}
+  - component: {fileID: 740800154}
+  m_Layer: 0
+  m_Name: GameOverComponent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &740800153
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740800152}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1481368294}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &740800154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740800152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 145cd4b6b534f56478f04e813f7bd991, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 8d84c551ee5a6094b9dda7d6e1cd82be,
+    type: 3}
+  m_SortingOrder: 0
 --- !u!43 &744993490
 Mesh:
   m_ObjectHideFlags: 0
@@ -8466,6 +8515,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7753549927774557791, guid: 29261ff8a16c6124f950e4dc5c76c71f,
+        type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 740800153}
     - targetCorrespondingSourceObject: {fileID: 7753549927774557791, guid: 29261ff8a16c6124f950e4dc5c76c71f,
         type: 3}
       insertIndex: -1
@@ -14856,6 +14909,11 @@ PrefabInstance:
       propertyPath: ExamineComponent
       value: 
       objectReference: {fileID: 707619893}
+    - target: {fileID: 3713934668116256082, guid: abc2037b666223a4ea39a2a4efb5c156,
+        type: 3}
+      propertyPath: GameOverComponent
+      value: 
+      objectReference: {fileID: 740800152}
     - target: {fileID: 7837168862051997250, guid: abc2037b666223a4ea39a2a4efb5c156,
         type: 3}
       propertyPath: m_Name
@@ -17268,8 +17326,8 @@ MonoBehaviour:
   patrolSpeed: 3
   searchTime: 5
   searchRadius: 10
+  catchDistance: 2
   player: {fileID: 5470756253393038250}
-  patrolRadius: 5
   currentState: 0
 --- !u!195 &1974289238
 NavMeshAgent:

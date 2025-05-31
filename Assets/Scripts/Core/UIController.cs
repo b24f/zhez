@@ -9,7 +9,7 @@ namespace Core
         [SerializeField] private GameObject HUDComponent;
         [SerializeField] private GameObject MenuComponent;
         [SerializeField] private GameObject ExamineComponent;
-       
+        [SerializeField] private GameObject GameOverComponent;
         private void Awake()
         {
             Current = this;
@@ -20,6 +20,7 @@ namespace Core
             MenuComponent.SetActive(false);
             HUDComponent.SetActive(false);
             ExamineComponent.SetActive(false);
+            GameOverComponent.SetActive(false);
         }
 
         public void RenderMenu()
@@ -38,6 +39,12 @@ namespace Core
         {
             Reset();
             ExamineComponent.SetActive(true);
+        }
+
+        public void RenderGameOver()
+        {
+            Reset();
+            GameOverComponent.SetActive(true);
         }
     }
 }

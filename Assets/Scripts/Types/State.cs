@@ -5,6 +5,7 @@ namespace Types
 		Play,
 		Menu,
 		Examine,
+		GameOver,
 		None,
 	}
 }

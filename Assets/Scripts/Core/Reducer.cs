@@ -33,6 +33,10 @@ namespace Core
             {
                 UIController.Current.RenderExamine();
             };
+            stateEnterActions[State.GameOver] = () =>
+            {
+                UIController.Current.RenderGameOver();
+            };
             
             UIController.Current.RenderHUD();
         }
